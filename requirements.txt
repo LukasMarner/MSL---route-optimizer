@@ -1,0 +1,8 @@
+ortools>=9.8
+pandas>=2.0
+numpy>=1.24
+folium>=0.15
+streamlit>=1.30
+streamlit-folium>=0.15
+pulp>=2.7
+pytest>=7.0
