@@ -47,9 +47,23 @@ def test_optimize_sample_straight_line():
     assert not at.exception and any("Rider 1" in m.value for m in at.markdown)
 
 
+def test_default_promise_is_20():
+    assert _slider(_app(), "Delivery promise").value == 20
+
+
 def test_optimize_sample_osrm_from_cache():
     at = _app()  # default = road network; sample matrix comes from data/osrm_cache
-    assert "O05, O23" in at.warning[0].value
+    assert not any("can never be delivered" in w.value for w in at.warning)
+    _optimize(at)
+    assert not at.exception and not at.error
+    assert any("Road network (OSRM)" in c.value for c in at.caption)
+
+
+def test_infeasible_orders_can_be_excluded():
+    at = _app()
+    _slider(at, "Delivery promise").set_value(15)
+    at.run()
+    assert any("O05, O23" in w.value for w in at.warning)
     next(c for c in at.checkbox if c.label.startswith("Plan the remaining")).check()
     at.run()
     _optimize(at)

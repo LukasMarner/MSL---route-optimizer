@@ -17,7 +17,7 @@ STRAIGHT_LINE = "straight_line"
 class Params:
     store_lat: float
     store_lon: float
-    promise_min: float = 15
+    promise_min: float = 20
     speed_kmph: float = 25
     road_factor: float = 1.3
     service_min: float = 2

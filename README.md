@@ -84,7 +84,7 @@ it directly.
 |---|---|
 | Store | 28.5319608, 77.2131596 |
 | Delivery radius | 2.5 km (min 0.2 km) |
-| Delivery promise | 15 min from order placement |
+| Delivery promise | 20 min from order placement (spec default was 15) |
 | Order age at dispatch | uniform 0–5 min |
 | Rider speed | 25 km/h |
 | Distance method | `osrm` (road network) or `straight_line` |
@@ -110,8 +110,9 @@ it directly.
   ~20–45 s.
 - OSRM snaps each point to the nearest road before measuring, so very short pairs can come out slightly *shorter*
   than straight line.
-- On this sample, road distances average ~1.6× straight line (vs the 1.3 road factor), which makes **O05 and O23
-  undeliverable** within their deadlines; the app and demo skip them with a warning.
+- On this sample, road distances average ~1.6× straight line (vs the 1.3 road factor). With a 15-min promise that
+  makes **O05 and O23 undeliverable**; with the 20-min default every order is reachable. The app and demo skip
+  undeliverable orders with a warning.
 
 ## Model notes
 

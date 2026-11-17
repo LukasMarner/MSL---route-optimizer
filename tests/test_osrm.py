@@ -113,8 +113,17 @@ def test_full_sample_runs_offline_from_committed_cache():
     orders = pd.read_csv(ROOT / "data" / "sample_orders.csv")
     inst = build_instance(orders, params)
     assert inst.distance_method == "osrm", inst.distance_warning
+    assert check_feasibility(inst) == []  # 20-min promise: every order reachable by road
+    sol = solve(inst, params)
+    assert verify_solution(sol, inst) == []
+
+
+def test_full_sample_15_min_promise_drops_far_orders():
+    params = Params(config.STORE_LAT, config.STORE_LON, promise_min=15, time_limit_s=2, distance_method="osrm")
+    orders = pd.read_csv(ROOT / "data" / "sample_orders.csv")
+    inst = build_instance(orders, params)
     bad = check_feasibility(inst)
-    assert bad == ["O05", "O23"]  # too far by road for their deadlines
+    assert bad == ["O05", "O23"]  # too far by road for a 15-min promise
     inst = build_instance(orders[~orders.order_id.isin(bad)].reset_index(drop=True), params)
     assert inst.distance_method == "osrm"
     sol = solve(inst, params)
